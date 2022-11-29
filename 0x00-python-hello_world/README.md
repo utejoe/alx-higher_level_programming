@@ -1,2 +1,1 @@
-___
-## Very first Python task in ALX
+Very first Python task in ALX
