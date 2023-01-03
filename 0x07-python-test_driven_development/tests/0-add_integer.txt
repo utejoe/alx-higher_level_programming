@@ -1,116 +1,131 @@
-Test cases for 0-add_integer module
-===================================
+==========================================
+Tests for the 0-add_integer module
+==========================================
 
-The 0-add_integer module takes two integers or floats as arguments and returns their sum
+This module has only one function which is the ``add_integer()``
+function which accepts an integer or float and return the sum in integer.
+Raise an ``exception`` if the argument is not an int or float.
 
-Usage
-=====
+Importing the ``add_integer()`` function
+=========================================
+        >>> add_integer = __import__("0-add_integer").add_integer
 
-Importing function from the module:
+checking for module docstring
+::
+        >>> mod_string = __import__("0-add_integer").__doc__
+        >>> len(mod_string) > 5
+        True
+
+checking for function docstring
+::
+        >>> fun_docs = add_integer.__doc__
+        >>> len(fun_docs) > 5
+        True
+
+checking addition of positive integer
+::
+        >>> add_integer(3, 2)
+        5
+        >>> add_integer(20000, 40000)
+        60000
+
+checking addition of negative integers
+::
+        >>> add_integer(-4, -2)
+        -6
+
+checking addition of both positive and negative integers
+::
+        >>> add_integer(1, -3)
+        -2
+
+checking addition of floats
+::
+        >>> add_integer(2.43, 0.32)
+        2
+        >>> add_integer(4.0/2.0, 5)
+        7
+        >>> add_integer(5.0, float("nan"))
+        Traceback (most recent call last):
+        ValueError: cannot convert float NaN to integer
+        >>> add_integer(float("inf"), 3)
+        Traceback (most recent call last):
+        OverflowError: cannot convert float infinity to integer
+
+checking addition of strings
+::
+        >>> add_integer(" ", 5)
+        Traceback (most recent call last):
+        TypeError: a must be an integer
+        >>> add_integer("cup")
+        Traceback (most recent call last):
+        TypeError: a must be an integer
+        >>> add_integer(20, "ten")
+        Traceback (most recent call last):
+        TypeError: b must be an integer
+
+checking addition of lists
+::
+        >>> add_integer(1, [])
+        Traceback (most recent call last):
+        TypeError: b must be an integer
+        >>> add_integer([2, 1, 4], [1,2,3])
+        Traceback (most recent call last):
+        TypeError: a must be an integer
+
+checking addition of dictionarys
+::
+        >>> add_integer({"add": 3}, float(5))
+        Traceback (most recent call last):
+        TypeError: a must be an integer
+
+checking addition of boolean values
+::
+        >>> add_integer(True, 3)
+        Traceback (most recent call last):
+        TypeError: a must be an integer
+
+checking addition of more then required arguments
+::
+        >>> add_integer(2, 3, 50)
+        Traceback (most recent call last):
+        TypeError: add_integer() takes from 1 to 2 positional arguments but 3 were given
+
+checking when no arguments is passed
+::
+        >>> add_integer()
+        Traceback (most recent call last):
+        TypeError: add_integer() missing 1 required positional argument: 'a'
+
+::
+
+Test for another data type other than integer:
     >>> add_integer = __import__('0-add_integer').add_integer
-
-Adding two positive integers (a = 1 and b = 1)
-    >>> add_integer(1, 1)
-    2
-
-Adding one positive and one negative integer (a = 10 and b = -4)
-    >>> add_integer(10, -4)
-    6
-
-Adding two negative integers (a = -10 and b = -4)
-    >>> add_integer(-10, -4)
-    -14
-
-Adding two integers with the second being the same as the default value of b (a = 2 and b = 98)
-    >>> add_integer(2)
-    100
-
-Adding a positive float and a positive integer (a = 2.5 and b = 5)
-    >>> add_integer(2.5, 5)
-    7
-
-Adding a float and an integer where the integer is equal to the default value of b (a = 2.5 and b = 98)
-    >>> add_integer(2.5)
-    100
-
-Adding a positive float and a negative integer (a = 10.5 and b = -2)
-	    >>> add_integer(10.5, -2)
-	    8
-
-Adding two negative floats (a = -10.5 and b = -2)
-	    >>> add_integer(-10.5, -2)
-	    -12
-
-Adding an integer number and a string (a = 4 and b = "School")
-    >>> add_integer(4, "School")
+    >>> add_integer("hey", 20)
     Traceback (most recent call last):
-	      ...
+        ...
+    TypeError: a must be an integer
+    >>> add_integer(20, (0,0))
+    Traceback (most recent call last):
+        ...
     TypeError: b must be an integer
 
-Passing no argument to the function
-    >>> add_integer(None)
+
+Test if the function takes in float and int:
+
+    >>> add_integer(1.1, 20)
+    21
+
+Test for negative number:
+
+    >>> add_integer(-20, 30)
+    10
+
+
+
+Test if a is empty:
+
+    >> add_integer()
     Traceback (most recent call last):
-	      ...
+        ...
     TypeError: a must be an integer
-
-Adding a letter and a number (a = 'c' and b = 1)
-    >>> add_integer('c', 1)
-    Traceback (most recent call last):
-              ...
-    TypeError: a must be an integer
-
-Adding two letters (a = 'c' and b = 'm')
-    >>> add_integer('c', 'm')
-    Traceback (most recent call last):
-              ...
-    TypeError: a must be an integer
-
-Adding a tuple
-    >>> add_integer((1, 1))
-    Traceback (most recent call last):
-              ...
-    TypeError: a must be an integer
-
-Adding a number and a list
-    >>> add_integer(123, [])
-    Traceback (most recent call last):
-	      ...
-    TypeError: b must be an integer
-
-Passing a only one string
-    >>> add_integer("Hello")
-    Traceback (most recent call last):
-	      ...
-    TypeError: a must be an integer
-
-Adding two float numbers (a = 1.2 and b = 4.2)
-    >>> add_integer(1.2, 4.2)
-    5
-
-Case Overflow:
-
-    >>> add_integer(float('inf'), 0)
-    Traceback (most recent call last):
-    	      ...
-    OverflowError: cannot convert float infinity to integer
-
-Case Overflow 2:
-
-    >>> add_integer(float('inf'), float('-inf'))
-    Traceback (most recent call last):
-    	      ...
-    OverflowError: cannot convert float infinity to integer
-
-Case NaN 1:
-
-    >>> add_integer(0, float('nan'))
-    Traceback (most recent call last):
-    	      ...
-    ValueError: cannot convert float NaN to integer
-
-Case NaN 2:
-
-    >>> add_integer(float('nan'))
-    Traceback (most recent call last):
-    	      ...
-    ValueError: cannot convert float NaN to integer
