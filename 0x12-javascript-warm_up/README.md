@@ -1,1 +1,1 @@
-# Solution to tasks on JavaScript - Warm up
+# 0x12. Javascript - Warm up

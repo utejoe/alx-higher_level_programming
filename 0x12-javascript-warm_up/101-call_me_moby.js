@@ -1,5 +1,6 @@
 #!/usr/bin/node
-// defines a named function for export
+// executes x times a function.
+
 exports.callMeMoby = function (x, theFunction) {
   for (let i = 0; i < x; i++) {
     theFunction();

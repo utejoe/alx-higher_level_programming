@@ -1,3 +1,4 @@
 #!/usr/bin/node
-// modifies value of myVar (assigned elsewhere w/o delaration = global var)
+// modifies the value of myVar to 333
+
 myVar = 333;
