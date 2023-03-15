@@ -1,12 +1,11 @@
 #!/usr/bin/node
-function factorial (n) {
-  if (n < 0) {
-    return (-1);
+// prints factorial of first arg given to script, uses recursive function
+function factorial (number) {
+  if (number > 1) {
+    return number * factorial(number - 1);
+  } else {
+    return 1;
   }
-  if (n === 0 || isNaN(n)) {
-    return (1);
-  }
-  return (n * factorial(n - 1));
 }
-
-console.log(factorial(Number(process.argv[2])));
+const n = Math.floor(Number(process.argv[2]));
+console.log(factorial(n));

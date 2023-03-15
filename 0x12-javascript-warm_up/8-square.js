@@ -1,11 +1,14 @@
 #!/usr/bin/node
-if (process.argv[2] === undefined || isNaN(process.argv[2])) {
+// prints square of side n out of 'X' chars; n taken from first arg to script
+const n = Math.floor(Number(process.argv[2]));
+if (isNaN(n)) {
   console.log('Missing size');
 } else {
-  const x = Number(process.argv[2]);
-  let i = 0;
-  while (i < x) {
-    console.log('X'.repeat(x));
-    i++;
+  for (let i = 0; i < n; i++) {
+    let line = '';
+    for (let j = 0; j < n; j++) {
+      line = line + 'X';
+    }
+    console.log(line);
   }
 }
