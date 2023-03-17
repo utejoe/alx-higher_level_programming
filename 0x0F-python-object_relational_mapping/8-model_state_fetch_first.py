@@ -1,33 +1,26 @@
 #!/usr/bin/python3
+"""0x0F. Python - Object-relational mapping - task 8. First state
 """
-    A script that returns the first State object from hbtn_0e_6_usa
-    Username, password and dbname wil be passed as arguments to the script.
-"""
-
-
-import sys
-from model_state import Base, State
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
 
 if __name__ == '__main__':
-    engine = create_engine('mysql+mysqldb://{}:{}@localhost:3306/{}'.format(
-                           sys.argv[1], sys.argv[2], sys.argv[3]),
-                           pool_pre_ping=True)
+    from sys import argv
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import Session
+    from model_state import Base, State
 
-    Session = sessionmaker(bind=engine)
+    if len(argv) != 4:
+        sys.exit('Use: 8-model_state_fetch_first.py <mysql username> '
+                 '<mysql password> <database name>')
+
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost:3306/'
+                           '{}'.format(argv[1], argv[2], argv[3]),
+                           pool_pre_ping=True)
     Base.metadata.create_all(engine)
 
-    # create a session
-    session = Session()
-
-    # extract first state
-    states = session.query(State).order_by(State.id).first()
-
-    # print state
-    if states is None:
-        print("Nothing")
+    session = Session(engine)
+    first_state = session.query(State).order_by(State.id).first()
+    if first_state is not None:
+        print("{}: {}".format(first_state.id, first_state.name))
     else:
-        print("{}: {}".format(states.id, states.name))
-
+        print("Nothing")
     session.close()

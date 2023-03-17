@@ -1,23 +1,21 @@
 #!/usr/bin/python3
-
-'''
-    Script that lists all states with
-    name starting with N.
-'''
-
-import sys
-import MySQLdb
+"""0x0F. Python - Object-relational mapping - task 1. Filter states"""
 
 if __name__ == '__main__':
-    setUp = MySQLdb.connect(
-        host="localhost", port=3306, user=sys.argv[1],
-        passwd=sys.argv[2], db=sys.argv[3]
-    )
-    Cursor = setUp.cursor()
-    Cursor.execute("SELECT * FROM states WHERE name LIKE 'N%' ORDER BY id ASC")
-    qRows = Cursor.fetchall()
-    for r in qRows:
-        if r[1][0] == 'N':
-            print(r)
-    Cursor.close()
-    setUp.close()
+    import sys
+    import MySQLdb
+
+    if len(sys.argv) != 4:
+        sys.exit('Use: 1-filter_states.py <mysql username> <mysql password>'
+                 ' <database name>')
+
+    conn = MySQLdb.connect(host='localhost', port=3306, user=sys.argv[1],
+                           passwd=sys.argv[2], db=sys.argv[3], charset='utf8')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM states WHERE name LIKE BINARY 'N%' "
+                "ORDER BY id ASC")
+    query_rows = cur.fetchall()
+    for row in query_rows:
+        print(row)
+    cur.close()
+    conn.close()

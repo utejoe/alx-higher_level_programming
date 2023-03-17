@@ -1,34 +1,26 @@
 #!/usr/bin/python3
+"""0x0F. Python - Object-relational mapping - task 11. Add a new state
 """
-    A script that adds the State object 'Louisiana' to hbtn_0e_6_usa
-    Username, password, dbname will be passed as arguments to the script.
-"""
-
-
-import sys
-from model_state import Base, State
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
 
 if __name__ == '__main__':
-    engine = create_engine('mysql+mysqldb://{}:{}@localhost:3306/{}'.format(
-                           sys.argv[1], sys.argv[2], sys.argv[3]),
+    from sys import argv, exit
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import Session
+    from model_state import Base, State
+
+    if len(argv) != 4:
+        exit('Use: 11-model_state_insert.py <mysql username> '
+             '<mysql password> <database name> ')
+
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost:3306/'
+                           '{}'.format(argv[1], argv[2], argv[3]),
                            pool_pre_ping=True)
+    Base.metadata.create_all(engine)  # creates decprecated warning
+    session = Session(engine)
 
-    Session = sessionmaker(bind=engine)
-
-    Base.metadata.create_all(engine)
-
-    # create a session
-    session = Session()
-
-    # create the object and add it
     new_state = State(name='Louisiana')
-    session.add(new_state)
+    session.add(new_state)  # 'pending', not added to db yet
     session.commit()
 
-    # print state.id
-    state_add = session.query(State).filter(State.name == 'Louisiana').one()
-    print(state_add.id)
-
+    print(new_state.id)
     session.close()
