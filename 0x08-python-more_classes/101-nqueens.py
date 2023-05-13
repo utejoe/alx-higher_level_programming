@@ -1,62 +1,58 @@
-#!/usr/bin/python3
-"""
-N queens backtracking program to print the coordinates of N queens
-on an NxN grid such that they are all in non-attacking positions
-"""
+import sys
 
+def is_safe(board, row, col, n):
+    # Check if there is a queen in the same column
+    for i in range(row):
+        if board[i][col] == 1:
+            return False
 
-from sys import argv
+    # Check if there is a queen in the upper left diagonal
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
 
-if __name__ == "__main__":
-    a = []
-    if len(argv) != 2:
-        print("Usage: nqueens N")
-        exit(1)
-    if argv[1].isdigit() is False:
-        print("N must be a number")
-        exit(1)
-    n = int(argv[1])
+    # Check if there is a queen in the upper right diagonal
+    for i, j in zip(range(row, -1, -1), range(col, n)):
+        if board[i][j] == 1:
+            return False
+
+    return True
+
+def solve(board, row, n):
+    # If all queens are placed, print the solution
+    if row == n:
+        print(board)
+        return
+
+    # Try placing a queen in each column of the current row
+    for col in range(n):
+        if is_safe(board, row, col, n):
+            board[row][col] = 1
+            solve(board, row + 1, n)
+            board[row][col] = 0
+
+def nqueens(n):
+    # Check if N is at least 4
     if n < 4:
         print("N must be at least 4")
-        exit(1)
+        sys.exit(1)
 
-    # initialize the answer list
-    for i in range(n):
-        a.append([i, None])
+    # Create an empty chessboard
+    board = [[0 for x in range(n)] for y in range(n)]
 
-    def already_exists(y):
-        """check that a queen does not already exist in that y value"""
-        for x in range(n):
-            if y == a[x][1]:
-                return True
-        return False
+    # Solve the problem
+    solve(board, 0, n)
 
-    def reject(x, y):
-        """determines whether or not to reject the solution"""
-        if (already_exists(y)):
-            return False
-        i = 0
-        while(i < x):
-            if abs(a[i][1] - y) == abs(i - x):
-                return False
-            i += 1
-        return True
+# Check if the program was called with the correct arguments
+if len(sys.argv) != 2:
+    print("Usage: nqueens N")
+    sys.exit(1)
 
-    def clear_a(x):
-        """clears the answers from the point of failure on"""
-        for i in range(x, n):
-            a[i][1] = None
+# Check if N is an integer
+try:
+    n = int(sys.argv[1])
+except ValueError:
+    print("N must be a number")
+    sys.exit(1)
 
-    def nqueens(x):
-        """recursive backtracking function to find the solution"""
-        for y in range(n):
-            clear_a(x)
-            if reject(x, y):
-                a[x][1] = y
-                if (x == n - 1):  # accepts the solution
-                    print(a)
-                else:
-                    nqueens(x + 1)  # moves on to next x value to continue
-
-    # start the recursive process at x = 0
-    nqueens(0)
+nqueens(n)
