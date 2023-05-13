@@ -1,22 +1,25 @@
 #!/usr/bin/node
-/* Print all characters of Star wars api
-in right order */
 const request = require('request');
-const url = `https://swapi-api.hbtn.io/api/films/${process.argv[2]}/`;
-
-request(url, (err, res, body) => {
-  if (err) console.log(err);
-  const index = 0;
-  const characters = JSON.parse(body).characters;
-  printCharcter(characters, index);
+const endPoint = 'http://swapi-api.hbtn.io/api/films/' + process.argv[2];
+request.get(endPoint, function (err, response, body) {
+  if (err) {
+    throw err;
+  } else if (response.statusCode === 200) {
+    const characters = JSON.parse(body).characters;
+    const l = [];
+    characters.forEach(character => {
+      l.push(new Promise((resolve, reject) => {
+        request.get(character, function (err, response, body) {
+          if (err) {
+            reject(err);
+          } else if (response.statusCode === 200) {
+            resolve(JSON.parse(body).name);
+          }
+        });
+      }));
+    });
+    Promise.all(l).then(names => {
+      names.forEach(name => console.log(name));
+    });
+  }
 });
-
-const printCharcter = function (url, i) {
-  request(url[i], (err, res, body) => {
-    if (err) console.log(err);
-    console.log(JSON.parse(body).name);
-    if (++i < url.length) {
-      printCharcter(url, i++);
-    }
-  });
-};
