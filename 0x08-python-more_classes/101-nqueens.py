@@ -1,40 +1,75 @@
 #!/usr/bin/python3
 import sys
 
-def nqueens(n):
-    solutions = []
-    cols = []
-    diag1 = []
-    diag2 = []
+def is_valid(board, row, col):
+    """Check if it's valid to place a queen at board[row][col]."""
+    n = len(board)
 
-    def backtrack(row):
-        if row == n:
-            solutions.append(cols[:])
-        for col in range(n):
-            if col not in cols and row - col not in diag1 and row + col not in diag2:
-                cols.append(col)
-                diag1.append(row - col)
-                diag2.append(row + col)
-                backtrack(row + 1)
-                cols.pop()
-                diag1.pop()
-                diag2.pop()
+    # Check this row on the left side
+    for i in range(col):
+        if board[row][i]:
+            return False
 
-    backtrack(0)
-    return solutions
+    # Check upper diagonal on the left side
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j]:
+            return False
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: nqueens N")
-        sys.exit(1)
-    try:
-        n = int(sys.argv[1])
-    except ValueError:
+    # Check lower diagonal on the left side
+    for i, j in zip(range(row, n), range(col, -1, -1)):
+        if board[i][j]:
+            return False
+
+    # It's valid to place a queen at board[row][col]
+    return True
+
+def n_queens_helper(n, board, col, result):
+    """Recursive backtracking helper function for the N queens problem."""
+    if col == n:
+        # We found a solution, add it to the result
+        result.append([[r, c] for r, c in enumerate(board)])
+        return
+
+    for row in range(n):
+        if is_valid(board, row, col):
+            # Place the queen at board[row][col]
+            board[row][col] = 1
+
+            # Explore further by placing the queens in the next columns
+            n_queens_helper(n, board, col + 1, result)
+
+            # Backtrack
+            board[row][col] = 0
+
+def n_queens(n):
+    """Solve the N queens problem and return a list of solutions."""
+    if not isinstance(n, int):
         print("N must be a number")
         sys.exit(1)
     if n < 4:
         print("N must be at least 4")
         sys.exit(1)
-    solutions = nqueens(n)
+
+    # Create an empty chessboard of size n x n
+    board = [[0 for _ in range(n)] for _ in range(n)]
+
+    # Solve the N queens problem using recursive backtracking
+    result = []
+    n_queens_helper(n, board, 0, result)
+
+    return result
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: nqueens N")
+        sys.exit(1)
+
+    try:
+        n = int(sys.argv[1])
+    except ValueError:
+        print("N must be a number")
+        sys.exit(1)
+
+    solutions = n_queens(n)
     for sol in solutions:
-        print([[i, sol[i]] for i in range(n)])
+        print(sol)
