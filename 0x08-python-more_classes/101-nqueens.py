@@ -1,25 +1,26 @@
+#!/usr/bin/python3
 import sys
 
-def is_safe(board, row, col):
-    for i in range(col):
-        if board[i] == row or \
-           board[i] - i == row - col or \
-           board[i] + i == row + col:
-            return False
-    return True
-
-def solve_n_queens(n):
+def nqueens(n):
     solutions = []
-    def backtrack(board, col):
-        if col == n:
-            solutions.append(list(enumerate(board)))
-            return
-        for row in range(n):
-            if is_safe(board, row, col):
-                board[col] = row
-                backtrack(board, col+1)
-                board[col] = -1
-    backtrack([-1]*n, 0)
+    cols = []
+    diag1 = []
+    diag2 = []
+
+    def backtrack(row):
+        if row == n:
+            solutions.append(cols[:])
+        for col in range(n):
+            if col not in cols and row - col not in diag1 and row + col not in diag2:
+                cols.append(col)
+                diag1.append(row - col)
+                diag2.append(row + col)
+                backtrack(row + 1)
+                cols.pop()
+                diag1.pop()
+                diag2.pop()
+
+    backtrack(0)
     return solutions
 
 if __name__ == "__main__":
@@ -34,6 +35,6 @@ if __name__ == "__main__":
     if n < 4:
         print("N must be at least 4")
         sys.exit(1)
-    solutions = solve_n_queens(n)
-    for solution in solutions:
-        print(solution)
+    solutions = nqueens(n)
+    for sol in solutions:
+        print([[i, sol[i]] for i in range(n)])
