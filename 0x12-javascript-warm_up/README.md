@@ -15,3 +15,4 @@ In this project, I learnt:
 - What are the arithmetic operators and how to use them
 - How to manipulate dictionary
 - How to import a file
+- thankyou
