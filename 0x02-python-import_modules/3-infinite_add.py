@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 if __name__ == "__main__":
+    """Find the sum of arguments."""
     import sys
-    no_of_args = len(sys.argv)
-    args_sum = 0
-
-    for i in range(1, no_of_args):
-        args_sum += int(sys.argv[i])
-    print("{:d}".format(args_sum))
+    sum = 0
+    if (len(sys.argv) > 1):
+        for i in range(1, len(sys.argv)):
+            sum += (int(sys.argv[i]))
+    print("{:d}".format(sum))
