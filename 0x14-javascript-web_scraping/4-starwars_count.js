@@ -1,7 +1,5 @@
 #!/usr/bin/node
-
 const request = require('request');
-
 const apiUrl = process.argv[2];
 
 request(apiUrl, (error, response, body) => {
@@ -15,4 +13,3 @@ request(apiUrl, (error, response, body) => {
     console.log(wedgeMovies.length);
   }
 });
-
